@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serenity | Find Your Calm</title>
+  <script src="https://cdn.jsdelivr.net/npm/tailwindcss-cdn@3.4.10/tailwindcss.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+
+  <style type="text/tailwindcss" data-teda="tailwind-apply">
+    @layer components {
+      .btn-primary { @apply bg-[hsl(var(--primary))] text-white px-8 py-4 rounded-full font-semibold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex items-center gap-2; }
+      .btn-secondary { @apply bg-white text-[hsl(var(--foreground))] border border-[hsl(var(--border))] px-8 py-4 rounded-full font-semibold shadow-sm hover:bg-[hsl(var(--secondary))] transition-all duration-300; }
+    }
+  </style>
+</head>
+<body class="bg-[hsl(var(--background))]">
+  
+  <!-- Navigation -->
+  <nav class="fixed w-full z-50 bg-[hsl(var(--background)/0.8)] backdrop-blur-md border-b border-[hsl(var(--border))]">
+    <div class="container mx-auto px-6 h-20 flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-2 group">
+        <img src="logo.svg" class="w-8 h-8 group-hover:rotate-12 transition-transform" alt="Logo">
+        <span class="text-xl font-bold tracking-tight text-[hsl(var(--primary))]">Serenity</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="text-sm font-medium hover:text-[hsl(var(--primary))] transition-colors">Features</a>
+        <a href="#about" class="text-sm font-medium hover:text-[hsl(var(--primary))] transition-colors">Our Philosophy</a>
+        <a href="app.html" class="btn-primary py-2 px-6 text-sm">Launch App</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section (Creative Asymmetry) -->
+  <section class="relative pt-32 pb-20 overflow-hidden">
+    <div class="container mx-auto px-6 relative z-10">
+      <div class="flex flex-col lg:flex-row items-center gap-16">
+        <div class="lg:w-3/5 space-y-8">
+          <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight">
+            <span class="text-[hsl(var(--primary))]">Breathe.</span><br>
+            Reflect.<br>
+            <span class="text-[hsl(var(--accent))]">Grow.</span>
+          </h1>
+          <p class="text-xl md:text-2xl opacity-70 max-w-lg font-light leading-relaxed">
+            Your personal sanctuary for mental clarity. A buildless, private space to track moods and find peace.
+          </p>
+          <div class="flex flex-wrap gap-4 pt-4">
+            <a href="app.html" class="btn-primary text-lg">
+              Start Your Journey <i data-lucide="ArrowRight" class="w-5 h-5"></i>
+            </a>
+            <a href="#features" class="btn-secondary text-lg">
+              Learn More
+            </a>
+          </div>
+        </div>
+        
+        <!-- Abstract Visual -->
+        <div class="lg:w-2/5 relative h-[500px] w-full">
+           <div class="absolute inset-0 bg-[hsl(var(--primary))] rounded-[3rem] rotate-3 opacity-10 animate-float"></div>
+           <div class="absolute inset-4 bg-[hsl(var(--secondary))] rounded-[3rem] -rotate-2 opacity-30"></div>
+           <div class="absolute inset-0 flex items-center justify-center">
+             <!-- Conceptual Interface Preview -->
+             <div class="bg-white/80 backdrop-blur-xl p-8 rounded-3xl shadow-2xl w-4/5 transform rotate-6 hover:rotate-0 transition-all duration-700 border border-white/50">
+               <div class="flex justify-between items-center mb-6">
+                 <div class="w-12 h-12 rounded-full bg-[hsl(var(--accent)/0.2)] flex items-center justify-center">
+                   <i data-lucide="Wind" class="text-[hsl(var(--accent))]"></i>
+                 </div>
+                 <div class="text-right">
+                   <div class="text-sm font-bold text-[hsl(var(--primary))]">Box Breathing</div>
+                   <div class="text-xs opacity-50">4 min remaining</div>
+                 </div>
+               </div>
+               <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+                 <div class="h-full bg-[hsl(var(--primary))] w-2/3"></div>
+               </div>
+               <div class="mt-8 space-y-3">
+                 <div class="h-4 bg-gray-100 rounded w-3/4"></div>
+                 <div class="h-4 bg-gray-100 rounded w-1/2"></div>
+               </div>
+             </div>
+           </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Background Blobs -->
+    <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-[hsl(var(--secondary)/0.3)] to-transparent -z-10 rounded-l-full blur-3xl"></div>
+  </section>
+
+  <!-- Features Section (Organic Layout) -->
+  <section id="features" class="py-24 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="max-w-xl mb-16">
+        <h2 class="text-4xl font-bold mb-4 text-[hsl(var(--primary))]">Tools for Mindfulness</h2>
+        <p class="text-lg opacity-60">Everything you need to center yourself, available instantly in your browser.</p>
+      </div>
+
+      <div class="space-y-32">
+        <!-- Feature 1 -->
+        <div class="flex flex-col md:flex-row items-center gap-12">
+          <div class="md:w-1/2 order-2 md:order-1">
+             <div class="relative">
+               <div class="absolute -inset-4 bg-[hsl(var(--primary)/0.1)] rounded-full blur-xl"></div>
+               <div class="relative bg-[hsl(var(--background))] p-8 rounded-2xl shadow-lg border border-[hsl(var(--border))]">
+                 <i data-lucide="BookHeart" class="w-12 h-12 text-[hsl(var(--primary))] mb-4"></i>
+                 <div class="space-y-4">
+                   <div class="p-4 bg-white rounded-xl shadow-sm border-l-4 border-[hsl(var(--accent))]">
+                     <p class="italic opacity-70">"I feel anxious about the upcoming presentation..."</p>
+                   </div>
+                   <div class="p-4 bg-white rounded-xl shadow-sm border-l-4 border-[hsl(var(--primary))]">
+                     <p class="italic opacity-70">"Went for a walk and felt much better."</p>
+                   </div>
+                 </div>
+               </div>
+             </div>
+          </div>
+          <div class="md:w-1/2 order-1 md:order-2">
+            <h3 class="text-3xl font-bold mb-4">Mood Journaling</h3>
+            <p class="text-lg opacity-70 leading-relaxed">
+              Track your emotional landscape over time. Our private, local-first journal helps you identify patterns and triggers without sending your data to the cloud.
+            </p>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="flex flex-col md:flex-row items-center gap-12">
+          <div class="md:w-1/2">
+            <h3 class="text-3xl font-bold mb-4">Guided Breathing</h3>
+            <p class="text-lg opacity-70 leading-relaxed">
+              Visual cues help you regulate your breath. Uses the proven 4-7-8 and box breathing techniques to lower cortisol levels instantly.
+            </p>
+          </div>
+          <div class="md:w-1/2 flex justify-center">
+             <div class="w-64 h-64 rounded-full border-4 border-[hsl(var(--secondary))] flex items-center justify-center relative">
+               <div class="w-48 h-48 bg-[hsl(var(--secondary))] rounded-full opacity-50 animate-pulse"></div>
+               <div class="absolute bg-white px-4 py-2 rounded-full shadow-sm font-mono text-sm">Inhale...</div>
+             </div>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="flex flex-col md:flex-row items-center gap-12">
+          <div class="md:w-1/2 order-2 md:order-1">
+             <div class="bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(var(--primary)/0.8)] p-8 rounded-3xl text-white shadow-xl">
+               <div class="flex items-center gap-3 mb-6">
+                 <i data-lucide="Sparkles" class="w-6 h-6"></i>
+                 <span class="font-semibold">ZenGuide AI</span>
+               </div>
+               <p class="text-xl font-light italic mb-6">"It sounds like you need a moment of stillness. Try the 5-4-3-2-1 grounding exercise."</p>
+               <div class="h-1 bg-white/20 rounded-full w-full"></div>
+             </div>
+          </div>
+          <div class="md:w-1/2 order-1 md:order-2">
+            <h3 class="text-3xl font-bold mb-4">AI Wellness Companion</h3>
+            <p class="text-lg opacity-70 leading-relaxed">
+              Powered by WebLLM, our on-device AI offers personalized suggestions and a listening ear. Completely private, running directly in your browser.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-32 bg-[hsl(var(--primary))] text-white text-center relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+       <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+         <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+       </svg>
+    </div>
+    <div class="container mx-auto px-6 relative z-10">
+      <h2 class="text-4xl md:text-6xl font-bold mb-8">Reclaim Your Calm</h2>
+      <p class="text-xl opacity-90 mb-10 max-w-2xl mx-auto">No accounts. No subscriptions. Just peace of mind.</p>
+      <a href="app.html" class="inline-block bg-white text-[hsl(var(--primary))] px-10 py-5 rounded-full text-xl font-bold shadow-2xl hover:scale-105 transition-transform">
+        Open Serenity App
+      </a>
+      <p class="mt-6 opacity-60 text-sm">Works offline after first load.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[hsl(var(--foreground))] text-[hsl(var(--background))] py-12">
+    <div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-2">
+        <img src="logo.svg" class="w-6 h-6 invert" alt="Logo">
+        <span class="font-bold text-lg">Serenity</span>
+      </div>
+      <div class="text-sm opacity-50">
+        &copy; <span id="year"></span> Serenity App. Built by <a href="https://teda.dev" class="underline hover:text-white transition-colors">Teda.dev</a>.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize Lucide
+    lucide.createIcons();
+    // Set Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+  <script src="scripts/helpers.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serenity App</title>
+  <script src="https://cdn.jsdelivr.net/npm/tailwindcss-cdn@3.4.10/tailwindcss.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+  
+  <style type="text/tailwindcss" data-teda="tailwind-apply">
+    @layer components {
+      .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
+      .animate-bounce-in { animation: bounceIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      @keyframes bounceIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+    }
+  </style>
+</head>
+<body class="bg-[hsl(var(--background))] overflow-hidden h-screen flex flex-col md:flex-row">
+  
+  <!-- Sidebar Navigation -->
+  <aside id="main-sidebar" class="fixed inset-y-0 left-0 z-50 w-64 bg-white/90 backdrop-blur-xl border-r border-[hsl(var(--border))] flex flex-col transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:bg-white/50 md:backdrop-blur-md shadow-2xl md:shadow-none">
+    <div class="h-20 flex items-center px-6">
+      <a href="index.html" class="flex items-center gap-2 hover:opacity-70 transition-opacity" title="Back to Home">
+        <img src="logo.svg" class="w-8 h-8" alt="Logo">
+        <span class="text-xl font-bold tracking-tight text-[hsl(var(--primary))]">Serenity</span>
+      </a>
+    </div>
+    
+    <nav id="app-nav" class="flex-1 px-4 space-y-2 py-4">
+      <!-- Injected by UI -->
+      <div class="animate-pulse space-y-4">
+        <div class="h-10 bg-gray-200 rounded-xl"></div>
+        <div class="h-10 bg-gray-200 rounded-xl"></div>
+        <div class="h-10 bg-gray-200 rounded-xl"></div>
+      </div>
+    </nav>
+
+    <div class="p-6">
+      <div class="p-4 bg-[hsl(var(--secondary))] rounded-xl text-[hsl(var(--secondary-foreground))]">
+        <h4 class="font-bold text-sm mb-1">Daily Tip</h4>
+        <p class="text-xs opacity-80">Drink water before your coffee to stay hydrated.</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 h-full relative overflow-hidden flex flex-col">
+    <!-- Header for Mobile -->
+    <header class="md:hidden h-16 border-b border-[hsl(var(--border))] flex items-center justify-between px-6 bg-white/50 backdrop-blur-md">
+      <span class="font-bold text-[hsl(var(--primary))]">Serenity</span>
+      <button onclick="window.App.toggleSidebar()" class="p-2 -mr-2 active:scale-95 transition-transform">
+        <i data-lucide="Menu" class="w-6 h-6"></i>
+      </button>
+    </header>
+
+    <!-- Content Container -->
+    <div id="app-content" class="flex-1 overflow-hidden relative flex flex-col bg-[hsl(var(--background))]">
+       <!-- Injected by UI -->
+    </div>
+  </main>
+
+  <!-- Scripts -->
+  <script src="scripts/helpers.js"></script>
+  <script src="scripts/ai.js"></script>
+  <script src="scripts/ui.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+</html>
