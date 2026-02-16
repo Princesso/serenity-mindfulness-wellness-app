@@ -2,14 +2,17 @@ window.App = window.App || {};
 
 (function() {
   const { Storage, generateId, formatDate } = window.App.Helpers;
-  
+
   // State
   let state = {
     view: 'dashboard', // dashboard, breathe, journal, ai
-    breathing: { active: false, phase: 'idle', timer: null },
+    breathing: { active: false },
     journal: Storage.get('app_journal', []),
     favorites: Storage.get('app_favorites', []),
-    aiLoading: false
+    aiLoading: false,
+    aiReady: false,
+    journalDraftMood: 3,
+    journalDraftText: ''
   };
 
   // Predefined Exercises
@@ -105,6 +108,7 @@ window.App = window.App || {};
   }
 
   function renderBreathe() {
+    const isRunning = state.breathing.active;
     return `
       <div class="h-full overflow-y-auto p-6 md:p-10 flex flex-col items-center justify-center">
       <div class="h-full flex flex-col items-center justify-center text-center max-w-lg mx-auto">
@@ -131,7 +135,7 @@ window.App = window.App || {};
         </div>
         <p class="mt-8 text-sm opacity-60 max-w-xs mx-auto">
           Follow the animation: Inhale as it expands, exhale as it contracts. This calms the nervous system.
-      </div>
+        </p>
       </div>
       </div>
     `;
@@ -188,18 +192,15 @@ window.App = window.App || {};
     return `
       <div class="h-full overflow-y-auto p-6 md:p-10">
         <div class="max-w-2xl mx-auto animate-fade-in">
-      <div class="max-w-2xl mx-auto animate-fade-in">
-        <h2 class="text-3xl font-bold mb-6 text-[hsl(var(--primary))]">Mood Journal</h2>
-        ${formHtml}
+          <h2 class="text-3xl font-bold mb-6 text-[hsl(var(--primary))]">Mood Journal</h2>
+          ${formHtml}
         </div>
-      </div>
         ${listHtml}
       </div>
     `;
   }
-    return `
-      <div class="h-full flex flex-col p-4 md:p-6 animate-fade-in">
-        <div class="flex-1 flex flex-col glass-panel rounded-2xl overflow-hidden shadow-sm h-full">
+
+  function renderAI() {
     return `
       <div class="h-[calc(100vh-140px)] flex flex-col glass-panel rounded-2xl overflow-hidden animate-fade-in">
         <div class="bg-[hsl(var(--primary))] text-white p-4 flex justify-between items-center">
@@ -208,7 +209,7 @@ window.App = window.App || {};
             <h3 class="font-semibold">ZenGuide Assistant</h3>
           </div>
           <div id="ai-status" class="text-xs opacity-80 flex items-center gap-2">
-            ${state.aiReady ? '<span class="w-2 h-2 bg-green-400 rounded-full"></span> Ready' : '<span class="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span> Loading Model...'} 
+            ${state.aiReady ? '<span class="w-2 h-2 bg-green-400 rounded-full"></span> Ready' : '<span class="w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></span> Loading Model...'}
             <span id="ai-progress"></span>
           </div>
         </div>
@@ -231,8 +232,7 @@ window.App = window.App || {};
             </button>
             <button id="ai-stop-btn" class="hidden absolute right-12 top-2 p-1.5 text-red-500 hover:bg-red-50 rounded-lg">
               <i data-lucide="Square" class="w-4 h-4 fill-current"></i>
-        </div>
-      </div>
+            </button>
           </div>
         </div>
       </div>
@@ -240,61 +240,62 @@ window.App = window.App || {};
   }
 
   /* --- LOGIC & HANDLERS --- */
-
   function init() {
-    // Load view
     render();
-    
-    // Auto-load AI if on AI tab, otherwise wait
     if (state.view === 'ai') loadAI();
   }
 
   function loadAI() {
     if (state.aiReady || state.aiLoading) return;
+    if (!window.AppLLM || typeof window.AppLLM.load !== 'function') {
+      console.error('AI module not available');
+      return;
+    }
     state.aiLoading = true;
-    
+
     window.AppLLM.load(null, (percent) => {
       $('#ai-progress').text(`${percent}%`);
     }).then(() => {
       state.aiReady = true;
       state.aiLoading = false;
-      render(); // Re-render to enable inputs
+      render();
     }).catch(err => {
       console.error(err);
+      state.aiLoading = false;
       $('#ai-status').html(`<span class="text-red-200">Error: WebGPU needed</span>`);
+    });
+  }
+
   function navigate(viewId) {
     state.view = viewId;
     if (viewId === 'ai') loadAI();
-    
-    // Close sidebar on mobile
+
     if (window.innerWidth < 768) {
       window.App.toggleSidebar(false);
     }
-    
-    render();
-    state.view = viewId;
-    if (viewId === 'ai') loadAI();
+
     render();
   }
 
   function render() {
     const $app = $('#app-content');
     const $nav = $('#app-nav');
-    
-    // Update Nav
-    $nav.html(renderSidebar());
-    lucide.createIcons();
 
-    // Update Content
+    $nav.html(renderSidebar());
+    if (window.lucide) lucide.createIcons();
+
     let content = '';
     if (state.view === 'dashboard') content = renderDashboard();
     else if (state.view === 'breathe') content = renderBreathe();
     else if (state.view === 'journal') content = renderJournal();
     else if (state.view === 'ai') content = renderAI();
-    
+
     $app.html(content);
-    lucide.createIcons();
+    if (window.lucide) lucide.createIcons();
     attachEvents();
+
+    // Restore journal draft text after re-render
+    $('#journal-input').val(state.journalDraftText || '');
   }
 
   function attachEvents() {
@@ -305,8 +306,7 @@ window.App = window.App || {};
     // Journal
     $('.journal-mood-btn').on('click', function() {
       state.journalDraftMood = parseInt($(this).data('val'));
-      render(); // sloppy re-render but works for this scale to show selection state
-      // Restore text
+      render();
       $('#journal-input').val(state.journalDraftText || '');
       $('#journal-input').focus();
     });
@@ -324,11 +324,9 @@ window.App = window.App || {};
       state.journal.unshift(entry);
       Storage.set('app_journal', state.journal);
       
-      // Reset draft
       state.journalDraftText = '';
       state.journalDraftMood = 3;
       
-      // Toast
       showToast('Entry saved to journal');
       render();
     });
@@ -339,25 +337,24 @@ window.App = window.App || {};
     });
     $('#ai-send-btn').on('click', sendMessage);
     $('#ai-stop-btn').on('click', () => {
-      window.AppLLM.stop();
+      if (window.AppLLM) window.AppLLM.stop();
       $('#ai-send-btn').show();
       $('#ai-stop-btn').addClass('hidden');
     });
   }
 
   /* --- BREATHING LOGIC --- */
-  let breatheInterval;
   function startBreathing() {
     state.breathing.active = true;
     render();
-    
+
     const $text = $('#breathe-text');
     const $circle = $('#breathe-circle');
-    
+
     let phase = 0; // 0=in, 1=hold, 2=out, 3=hold
     const runCycle = () => {
       if (!state.breathing.active) return;
-      
+
       if (phase === 0) {
         $text.text('Inhale...');
         $circle.css('transform', 'scale(1.5)');
@@ -376,7 +373,7 @@ window.App = window.App || {};
         setTimeout(() => { phase = 0; runCycle(); }, 4000);
       }
     };
-    
+
     runCycle();
   }
 
@@ -387,10 +384,11 @@ window.App = window.App || {};
 
   /* --- AI LOGIC --- */
   async function sendMessage() {
+    if (!state.aiReady) return;
     const $input = $('#ai-input');
     const text = $input.val().trim();
     if (!text) return;
-    
+
     $input.val('');
     $('#chat-container').append(`
       <div class="flex gap-3 max-w-[85%] ml-auto justify-end">
@@ -399,7 +397,7 @@ window.App = window.App || {};
          </div>
       </div>
     `);
-    
+
     const $replyContainer = $(`
       <div class="flex gap-3 max-w-[85%]">
          <div class="w-8 h-8 rounded-full bg-[hsl(var(--primary))] flex-shrink-0 flex items-center justify-center text-white"><i data-lucide="Bot" class="w-4 h-4"></i></div>
@@ -407,7 +405,7 @@ window.App = window.App || {};
       </div>
     `);
     $('#chat-container').append($replyContainer);
-    
+
     const $responseBody = $replyContainer.find('.ai-response');
     const $scroll = $('#chat-container');
     $scroll.scrollTop($scroll[0].scrollHeight);
@@ -459,5 +457,4 @@ window.App = window.App || {};
     Storage.set('app_journal', state.journal);
     render();
   };
-
 })();
